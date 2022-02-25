@@ -38,8 +38,7 @@ export default function EditScreenInfo({ path }) {
       <View style={styles.helpContainer}>
         <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
           <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
-            Tap here if your app doesn't automatically update after making
-            changes
+            Tap here to open youtube app
           </Text>
         </TouchableOpacity>
       </View>
@@ -49,7 +48,7 @@ export default function EditScreenInfo({ path }) {
 
 function handleHelpPress() {
   WebBrowser.openBrowserAsync(
-    "https://docs.expo.dev/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet"
+    "https://youtube.com"
   );
 }
 
@@ -80,5 +79,6 @@ const styles = StyleSheet.create({
   },
   helpLinkText: {
     textAlign: "center",
+    color:'red'
   },
 });

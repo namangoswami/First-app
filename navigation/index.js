@@ -5,11 +5,13 @@ import {
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
+import { useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import NotFoundScreen from "../screens/NotFoundScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { color } from "react-native-reanimated";
 
 export default function Navigation({ colorScheme }) {
   return (
@@ -17,7 +19,7 @@ export default function Navigation({ colorScheme }) {
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      <RootNavigator colorScheme={colorScheme} />
     </NavigationContainer>
   );
 }
@@ -26,10 +28,11 @@ export default function Navigation({ colorScheme }) {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator();
 
-function RootNavigator() {
+function RootNavigator( {colorScheme}) {
+  console.log(colorScheme)
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}   >
+      <Stack.Screen name="Root" component={BottomTabNavigator}  props={{colorScheme:colorScheme}} />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

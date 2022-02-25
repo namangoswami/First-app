@@ -1,18 +1,52 @@
 import { StyleSheet } from "react-native";
 
 import EditScreenInfo from "../components/EditScreenInfo";
+import {Formik} from 'formik';
 import { Text, View } from "../components/Themed";
-
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { TextInput } from "react-native";
 export default function TabTwoScreen() {
+  const [postData, setPostData]=useState({
+    creator:'', 
+    title:'',
+    message:'',
+    tags:'',
+    selectedFile:''
+});
+const userId=useSelector(state=>state.user)
+useEffect(()=>{
+  setPostData({...postData, creator:userId}, console.log('updatedPostData'));
+}, [userId])
+useEffect(()=>{
+
+  console.log('user: ',userId)
+})
+useEffect(()=>{
+
+  console.log('updatePost: ',postData)
+}, [postData])
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <Text>{postData.creator}</Text>
+      <Formik 
+        initialValues={postData}
+      >
+        {(props)=>{
+          console.log('formik',props.values);
+          return(
+          <View>
+            <TextInput
+            placeholder='Creator'
+            onChangeText={props.handleChange('creator')}
+            value={props.values.creator}
+            />
+          </View>
+        )}
+
+        }
+
+      </Formik>
     </View>
   );
 }

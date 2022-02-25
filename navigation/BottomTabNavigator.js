@@ -4,32 +4,55 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useColorScheme } from "react-native";
-
+import ContactScreen from '../contact-app/Screens/ContactListScreen'
+import AddContactScreen from '../contact-app/Screens/AddContactScreen'
 import Colors from "../constants/Colors";
+import { createContext } from "react";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
+import React from "react";
+import contacts from '../contact-app/contacts';
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "../actions/posts";
+import posts from "../components/Posts";
+
 
 const BottomTab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+const AllProps=React.createContext({
+  showContacts:true,
+  contacts:contacts
+})
 
-  return (
+export default class BottomTabNavigator extends React.Component {
+  render(){ 
+    // console.log(this.props)
+    return(
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      screenOptions={{ tabBarActiveTintColor: Colors[colorScheme].tint }}
+      
+      screenOptions={{ headerShown:false }}
     >
+      
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Posts"
+        component={PostNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="ios-call" color={color} />
           ),
         }}
-      />
+      /><BottomTab.Screen
+      name="TabOne"
+      component={TabOneNavigator}
+      options={{
+        tabBarIcon: ({ color }) => (
+          <TabBarIcon name="ios-code" color={color} />
+        ),
+      }}
+    />
       <BottomTab.Screen
-        name="TabTwo"
+        name="User"
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => (
@@ -37,8 +60,8 @@ export default function BottomTabNavigator() {
           ),
         }}
       />
-    </BottomTab.Navigator>
-  );
+    </BottomTab.Navigator> 
+  )}
 }
 
 // You can explore the built-in icon families and icons on the web at:
@@ -51,13 +74,16 @@ function TabBarIcon(props) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator();
 
-function TabOneNavigator() {
+ function TabOneNavigator() {
+  const state=useSelector(state=>state);
+
+
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
+        name="a"
         component={TabOneScreen}
-        options={{ headerTitle: "Tab One Title" }}
+        options={{ headerTitle: "a"}}
       />
     </TabOneStack.Navigator>
   );
@@ -75,4 +101,38 @@ function TabTwoNavigator() {
       />
     </TabTwoStack.Navigator>
   );
+}
+
+const ContactsStack=createStackNavigator();
+
+function ContactsNavigator(){
+  return(
+    <AllProps.Provider value={{showContacts:true,
+      contacts:contacts}}>
+      
+    <ContactsStack.Navigator headerShown={false}>
+      <ContactsStack.Screen
+        name="Contactscreen"
+        component={ContactScreen}
+        options={{headerTitle:"ContactScreen"}}
+        />
+      <ContactsStack.Screen
+        name="AddContact"
+        component={AddContactScreen}
+        options={{headerTitle:"Add contact"}}
+        />
+      
+    </ContactsStack.Navigator>
+        </AllProps.Provider>
+  )
+}
+const PostStackNavigator=createStackNavigator();
+function PostNavigator(){
+  return(
+    <PostStackNavigator.Navigator headerShown={false}>
+      <PostStackNavigator.Screen name="Post"
+      component={posts}
+      options={{headerTitle:"Post"}}/>
+    </PostStackNavigator.Navigator>
+  ) 
 }
